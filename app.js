@@ -3,7 +3,10 @@
 // =======================
 
 const hoursPerDay = 8;
-const startDate = new Date(2026, 0, 6); // 6 Ian 2026 = SC1
+
+// 6 Ian 2026 = SC1 (ziua 0 din ciclu)
+const startDayNumber = dayNumber(2026, 0, 6);
+
 let current = new Date();
 
 const calendar = document.getElementById("calendar");
@@ -12,12 +15,31 @@ const overtimeText = document.getElementById("overtimeText");
 const footer = document.getElementById("todayFooter");
 
 // =======================
-// SHIFT LOGIC
+// DAY NUMBER (fără timp)
+// =======================
+// Transformă o dată într-un număr unic de zile
+// fără ore, fără DST, fără fus orar
+
+function dayNumber(y, m, d) {
+  return Math.floor(
+    Date.UTC(y, m, d) / 86400000
+  );
+}
+
+// =======================
+// SHIFT LOGIC (DOAR ZILE)
 // =======================
 
+const cycle = ["sc1", "sc1", "sc2", "sc2", "sc3", "sc3", "lib", "lib"];
+
 function shiftFor(date) {
-  const diff = Math.floor((date - startDate) / 86400000);
-  const cycle = ["sc1", "sc1", "sc2", "sc2", "sc3", "sc3", "lib", "lib"];
+  const dn = dayNumber(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const diff = dn - startDayNumber;
   return cycle[(diff % 8 + 8) % 8];
 }
 
@@ -41,7 +63,7 @@ function render() {
   const start = (first.getDay() + 6) % 7; // luni = 0
   const daysInMonth = new Date(y, m + 1, 0).getDate();
 
-  // 👇 NUMĂR CORECT DE CELULE (5 sau 6 rânduri)
+  // 5 sau 6 rânduri, exact cât trebuie
   const totalCells = Math.ceil((start + daysInMonth) / 7) * 7;
 
   let worked = 0;
@@ -54,22 +76,29 @@ function render() {
 
     if (d.getMonth() !== m) {
       div.classList.add("other");
+      div.innerHTML = `<div></div><div></div>`;
     } else {
       const shift = shiftFor(d);
       div.classList.add(shift);
 
       if (shift !== "lib") worked += hoursPerDay;
       if (d.getDay() > 0 && d.getDay() < 6) workdays++;
+
+      div.innerHTML = `
+        <div>${d.getDate()}</div>
+        <div>${shift.toUpperCase()}</div>
+      `;
     }
 
-    if (d.toDateString() === new Date().toDateString()) {
+    // azi
+    const today = new Date();
+    if (
+      d.getDate() === today.getDate() &&
+      d.getMonth() === today.getMonth() &&
+      d.getFullYear() === today.getFullYear()
+    ) {
       div.classList.add("today");
     }
-
-    div.innerHTML = `
-      <div>${d.getDate()}</div>
-      <div>${shiftFor(d).toUpperCase()}</div>
-    `;
 
     calendar.appendChild(div);
   }
@@ -79,10 +108,11 @@ function render() {
   // =======================
 
   const overtime = worked - workdays * hoursPerDay;
+
   overtimeText.textContent =
     overtime > 0
-      ? `${overtime} ore… forța e cu tine`
-      : `${overtime} ore… portofelul plânge`;
+      ? `${overtime} ore… forța e cu tine 💪`
+      : `${overtime} ore… portofelul plânge 😭`;
 
   overtimeText.className = overtime > 0 ? "positive" : "negative";
 
