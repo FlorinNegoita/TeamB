@@ -75,9 +75,13 @@ function render() {
     div.className = "day";
 
     if (d.getMonth() !== m) {
-      div.classList.add("other");
-      div.innerHTML = `<div></div><div></div>`;
-    } else {
+  div.classList.add("other");
+  div.innerHTML = `
+    <div>${d.getDate()}</div>
+    <div></div>
+  `;
+}
+ else {
       const shift = shiftFor(d);
       div.classList.add(shift);
 
