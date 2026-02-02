@@ -9,12 +9,19 @@ body {
 
 /* HEADER */
 .topbar {
-  padding: env(safe-area-inset-top) 16px 12px;
+  padding: env(safe-area-inset-top) 16px 16px;
   background: linear-gradient(90deg, #a855f7, #3b82f6);
   color: white;
   text-align: center;
+}
+
+/* TEXTUL */
+.topbar .title {
+  display: block;
   font-weight: 600;
   font-size: 18px;
+
+  transform: translateY(6px); /* + jos | - sus */
 }
 
 /* OVERTIME */
