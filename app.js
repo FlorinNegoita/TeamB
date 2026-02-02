@@ -25,6 +25,33 @@ function dayNumber(y, m, d) {
     Date.UTC(y, m, d) / 86400000
   );
 }
+// =======================
+// ZILE DE CONCEDIU (MANUAL)
+// =======================
+// format OBLIGATORIU: "YYYY-MM-DD"
+
+const vacationDays = new Set([
+  "2026-04-10",
+  "2026-04-11",
+  "2026-04-12",
+  "2026-04-13",
+  "2026-08-08",
+  "2026-08-09",
+  "2026-08-10",
+  "2026-08-11",
+  "2026-08-12",
+  "2026-08-13",
+  "2026-08-14",
+  "2026-08-15",
+  "2026-08-16",
+  "2026-08-17",
+  "2026-08-18",
+  "2026-08-19",
+  "2026-08-20",
+  "2026-08-21",
+  "2026-08-22",
+  "2026-08-23"
+]);
 
 // =======================
 // SHIFT LOGIC (DOAR ZILE)
@@ -41,6 +68,12 @@ function shiftFor(date) {
 
   const diff = dn - startDayNumber;
   return cycle[(diff % 8 + 8) % 8];
+}
+function dateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 // =======================
@@ -83,15 +116,19 @@ function render() {
 }
  else {
       const shift = shiftFor(d);
-      div.classList.add(shift);
+const isVacation = vacationDays.has(dateKey(d));
 
-      if (shift !== "lib") worked += hoursPerDay;
-      if (d.getDay() > 0 && d.getDay() < 6) workdays++;
+div.classList.add(shift);
+if (isVacation) div.classList.add("vacation");
 
-      div.innerHTML = `
-        <div>${d.getDate()}</div>
-        <div>${shift.toUpperCase()}</div>
-      `;
+if (shift !== "lib") worked += hoursPerDay;
+if (d.getDay() > 0 && d.getDay() < 6) workdays++;
+
+div.innerHTML = `
+  <div>${d.getDate()}</div>
+  <div>${isVacation ? "CO" : shift.toUpperCase()}</div>
+`;
+
     }
 
     // azi

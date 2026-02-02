@@ -145,4 +145,10 @@ footer {
   /* safe area iPhone */
   padding-bottom: calc(12px + env(safe-area-inset-bottom));
 }
+.day.vacation {
+  background-color: #107c10;   /* verde inchis */
+  border: 2px solid #118dff;   /* portocaliu accent */
+  color: #ffffff;
+  font-weight: 700;
+}
 
