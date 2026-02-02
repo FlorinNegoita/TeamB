@@ -69,8 +69,8 @@ body {
   font-size: 12px;
   font-weight: 600;
   padding: 0 12px;
-  margin-bottom: 22px;
-  margin-top: 22px;
+  margin-bottom: 12px;
+  margin-top: 42px;
 }
 
 /* CALENDAR */
@@ -79,7 +79,7 @@ body {
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
   padding: 12px;
-  margin-top: 38px;
+  margin-top: 10px;
 }
 
 .day {
