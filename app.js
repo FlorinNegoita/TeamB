@@ -4,7 +4,7 @@
 
 const hoursPerDay = 8;
 
-// 6 Ian 2026 = SC1 (ziua 0 din ciclu)
+// 6 Ian 2026 = SC1
 const startDayNumber = dayNumber(2026, 0, 6);
 
 let current = new Date();
@@ -15,49 +15,30 @@ const overtimeText = document.getElementById("overtimeText");
 const footer = document.getElementById("todayFooter");
 
 // =======================
-// DAY NUMBER (fără timp)
+// DAY NUMBER
 // =======================
-// Transformă o dată într-un număr unic de zile
-// fără ore, fără DST, fără fus orar
 
 function dayNumber(y, m, d) {
-  return Math.floor(
-    Date.UTC(y, m, d) / 86400000
-  );
+  return Math.floor(Date.UTC(y, m, d) / 86400000);
 }
+
 // =======================
-// ZILE DE CONCEDIU (MANUAL)
+// CONCEDIU
 // =======================
-// format OBLIGATORIU: "YYYY-MM-DD"
 
 const vacationDays = new Set([
-  "2026-04-10",
-  "2026-04-11",
-  "2026-04-12",
-  "2026-04-13",
-  "2026-08-08",
-  "2026-08-09",
-  "2026-08-10",
-  "2026-08-11",
-  "2026-08-12",
-  "2026-08-13",
-  "2026-08-14",
-  "2026-08-15",
-  "2026-08-16",
-  "2026-08-17",
-  "2026-08-18",
-  "2026-08-19",
-  "2026-08-20",
-  "2026-08-21",
-  "2026-08-22",
-  "2026-08-23"
+  "2026-04-10","2026-04-11","2026-04-12","2026-04-13",
+  "2026-08-08","2026-08-09","2026-08-10","2026-08-11",
+  "2026-08-12","2026-08-13","2026-08-14","2026-08-15",
+  "2026-08-16","2026-08-17","2026-08-18","2026-08-19",
+  "2026-08-20","2026-08-21","2026-08-22","2026-08-23"
 ]);
 
 // =======================
-// SHIFT LOGIC (DOAR ZILE)
+// SHIFT LOGIC
 // =======================
 
-const cycle = ["sc1", "sc1", "sc2", "sc2", "sc3", "sc3", "lib", "lib"];
+const cycle = ["sc1","sc1","sc2","sc2","sc3","sc3","lib","lib"];
 
 function shiftFor(date) {
   const dn = dayNumber(
@@ -65,15 +46,12 @@ function shiftFor(date) {
     date.getMonth(),
     date.getDate()
   );
-
   const diff = dn - startDayNumber;
   return cycle[(diff % 8 + 8) % 8];
 }
-function dateKey(date) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
 // =======================
@@ -86,21 +64,20 @@ function render() {
   const y = current.getFullYear();
   const m = current.getMonth();
 
-  // TITLU LUNĂ
   monthTitle.textContent =
-    current
-      .toLocaleDateString("ro-RO", { month: "long", year: "numeric" })
-      .toUpperCase();
+    current.toLocaleDateString("ro-RO", {
+      month: "long",
+      year: "numeric"
+    }).toUpperCase();
 
   const first = new Date(y, m, 1);
-  const start = (first.getDay() + 6) % 7; // luni = 0
+  const start = (first.getDay() + 6) % 7;
   const daysInMonth = new Date(y, m + 1, 0).getDate();
-
-  // 5 sau 6 rânduri, exact cât trebuie
   const totalCells = Math.ceil((start + daysInMonth) / 7) * 7;
 
   let worked = 0;
   let workdays = 0;
+  let vacationDaysInMonth = 0;
 
   for (let i = 0; i < totalCells; i++) {
     const d = new Date(y, m, i - start + 1);
@@ -108,30 +85,35 @@ function render() {
     div.className = "day";
 
     if (d.getMonth() !== m) {
-  div.classList.add("other");
-  div.innerHTML = `
-    <div>${d.getDate()}</div>
-    <div></div>
-  `;
-}
- else {
+      div.classList.add("other");
+      div.innerHTML = `<div>${d.getDate()}</div><div></div>`;
+    } else {
       const shift = shiftFor(d);
-const isVacation = vacationDays.has(dateKey(d));
+      const isVacation = vacationDays.has(dateKey(d));
+      const isWeekday = d.getDay() > 0 && d.getDay() < 6;
 
-div.classList.add(shift);
-if (isVacation) div.classList.add("vacation");
+      div.classList.add(shift);
+      if (isVacation) div.classList.add("vacation");
 
-if (shift !== "lib") worked += hoursPerDay;
-if (d.getDay() > 0 && d.getDay() < 6) workdays++;
+      // ===== LOGICA FINALĂ CORECTĂ =====
 
-div.innerHTML = `
-  <div>${d.getDate()}</div>
-  <div>${isVacation ? "CO" : shift.toUpperCase()}</div>
-`;
+      // ore lucrate (L–D)
+      if (!isVacation && shift !== "lib") {
+        worked += hoursPerDay;
+      }
 
+      // norma (doar L–V)
+      if (isWeekday) {
+        workdays++;
+        if (isVacation) vacationDaysInMonth++;
+      }
+
+      div.innerHTML = `
+        <div>${d.getDate()}</div>
+        <div>${isVacation ? "CO" : shift.toUpperCase()}</div>
+      `;
     }
 
-    // azi
     const today = new Date();
     if (
       d.getDate() === today.getDate() &&
@@ -148,18 +130,16 @@ div.innerHTML = `
   // OVERTIME
   // =======================
 
-  const overtime = worked - workdays * hoursPerDay;
+  const overtime =
+    worked - (workdays - vacationDaysInMonth) * hoursPerDay;
 
   overtimeText.textContent =
     overtime > 0
       ? `${overtime} ore… forța e cu tine 💪`
       : `${overtime} ore… portofelul plânge 😭`;
 
-  overtimeText.className = overtime > 0 ? "positive" : "negative";
-
-  // =======================
-  // FOOTER
-  // =======================
+  overtimeText.className =
+    overtime > 0 ? "positive" : "negative";
 
   footer.textContent =
     "Azi e: " +
@@ -172,7 +152,7 @@ div.innerHTML = `
 }
 
 // =======================
-// NAVIGATION
+// NAV
 // =======================
 
 document.getElementById("prev").onclick = () => {
@@ -189,9 +169,5 @@ document.getElementById("todayBtn").onclick = () => {
   current = new Date();
   render();
 };
-
-// =======================
-// INIT
-// =======================
 
 render();
