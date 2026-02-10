@@ -22,6 +22,10 @@ function dayNumber(y, m, d) {
   return Math.floor(Date.UTC(y, m, d) / 86400000);
 }
 
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
 // =======================
 // CONCEDIU
 // =======================
@@ -32,6 +36,26 @@ const vacationDays = new Set([
   "2026-08-12","2026-08-13","2026-08-14","2026-08-15",
   "2026-08-16","2026-08-17","2026-08-18","2026-08-19",
   "2026-08-20","2026-08-21","2026-08-22","2026-08-23"
+]);
+
+// =======================
+// SARBATORI LEGALE (RO)
+// =======================
+
+const holidays = new Set([
+  "2026-01-01",
+  "2026-01-02",
+  "2026-01-24",
+  "2026-04-10",
+  "2026-04-12",
+  "2026-04-13",
+  "2026-05-01",
+  "2026-06-01",
+  "2026-08-15",
+  "2026-11-30",
+  "2026-12-01",
+  "2026-12-25",
+  "2026-12-26"
 ]);
 
 // =======================
@@ -48,10 +72,6 @@ function shiftFor(date) {
   );
   const diff = dn - startDayNumber;
   return cycle[(diff % 8 + 8) % 8];
-}
-
-function dateKey(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
 // =======================
@@ -88,14 +108,19 @@ function render() {
       div.classList.add("other");
       div.innerHTML = `<div>${d.getDate()}</div><div></div>`;
     } else {
+      const key = dateKey(d);
       const shift = shiftFor(d);
-      const isVacation = vacationDays.has(dateKey(d));
+
+      const isVacation = vacationDays.has(key);
+      const isHoliday = holidays.has(key);
       const isWeekday = d.getDay() > 0 && d.getDay() < 6;
 
       div.classList.add(shift);
-      if (isVacation) div.classList.add("vacation");
 
-      // ===== LOGICA FINALĂ CORECTĂ =====
+      if (isHoliday) div.classList.add("holiday");
+      if (isVacation) div.classList.add("vacation"); // CO bate vizual tot
+
+      // ===== CALCUL ORE =====
 
       // ore lucrate (L–D)
       if (!isVacation && shift !== "lib") {
@@ -109,8 +134,8 @@ function render() {
       }
 
       div.innerHTML = `
-        <div>${d.getDate()}</div>
-        <div>${isVacation ? "CO" : shift.toUpperCase()}</div>
+        <div class="date">${d.getDate()}</div>
+        <div class="shift-label">${isVacation ? "CO" : shift.toUpperCase()}</div>
       `;
     }
 
