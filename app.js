@@ -43,19 +43,23 @@ const vacationDays = new Set([
 // =======================
 
 const holidays = new Set([
-  "2026-01-01",
-  "2026-01-02",
-  "2026-01-24",
-  "2026-04-10",
-  "2026-04-12",
-  "2026-04-13",
-  "2026-05-01",
-  "2026-06-01",
-  "2026-08-15",
-  "2026-11-30",
-  "2026-12-01",
-  "2026-12-25",
-  "2026-12-26"
+  "2026-01-01",  //anul nou
+  "2026-01-02",  //a doua zi de anul nou
+  "2026-01-06",  //Boboteaza
+  "2026-01-07",  //sf. Ion
+  "2026-01-24",  //mica unire
+  "2026-04-10",  //vinerea mare
+  "2026-04-11",  //sambata mare
+  "2026-04-12",  //Pastele
+  "2026-04-13",  //a doua zi de Paste
+  "2026-05-01",  //ziua muncii
+  "2026-05-31",  //Rusaliile
+  "2026-06-01",  //a doua zi de Rusalii, ziua copilului
+  "2026-08-15",  //sf. Maria
+  "2026-11-30",  //sf.Andrei
+  "2026-12-01",  //ziua Romaniei
+  "2026-12-25",  //Craciunul
+  "2026-12-26"   //a doua zi de Craciun
 ]);
 
 // =======================
