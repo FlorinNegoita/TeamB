@@ -234,7 +234,7 @@ inset 0 -3px 6px rgba(0,0,0,0.2);
   gap: 12px;
 
   font-size: 12px;
-  background: rgba(242,242,247,0.95);
+  /*background: rgba(242,242,247,0.95);*/
   padding: 8px 0;
 
   border-top: 1px solid #e5e7eb;
@@ -255,6 +255,7 @@ inset 0 -3px 6px rgba(0,0,0,0.2);
 .sc3 { background: #fecaca; }
 .lib { background: #bbf7d0; }
 .CO { background : #107c10; }
+
 footer {
   position: fixed;
   bottom: 0;                     /* 👈 JOS DE TOT */
