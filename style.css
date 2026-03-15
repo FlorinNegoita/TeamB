@@ -3,8 +3,43 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  background: #f2f2f7;
+
+  background: linear-gradient(
+    135deg,
+    #c7d2fe 0%,
+    #a5f3fc 40%,
+    #fbcfe8 100%
+  );
+
+  background-attachment: fixed;
+
   color: #111;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(circle at 20% 25%, rgba(255,255,255,0.6), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.45), transparent 50%);
+
+  mix-blend-mode: soft-light;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.06),
+    rgba(255,255,255,0)
+  );
 }
 
 /* HEADER */
@@ -76,11 +111,91 @@ body {
 }
 
 .day {
+
+
+  position: relative;
+  overflow: visible;
   height: 60px;
-  border: 1px solid #000;
+
   font-size: 11px;
   text-align: center;
   padding-top: 4px;
+
+  border-radius: 10px;
+
+  border: 1px solid rgba(255,255,255,0.6);
+
+  background:
+  linear-gradient(
+    145deg,
+    rgba(255,255,255,0.8),
+    rgba(255,255,255,0.35)
+  );
+
+  box-shadow:
+0 10px 8px rgba(0,0,0,0.55),
+inset 0 1px 0 rgba(255,255,255,0.95),
+inset 0 -3px 6px rgba(0,0,0,0.2);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+}
+
+.day.today {
+  position: relative;
+  z-index: 5;
+  
+}
+
+.day.today::before {
+  content: "";
+  position: absolute;
+
+  left: 50%;
+  bottom: -12px;
+
+  transform: translateX(-50%);
+
+  width: 130%;
+  height: 20px;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,60,60,0.8) 0%,
+    rgba(255,60,60,0.35) 40%,
+    rgba(255,60,60,0) 75%
+  );
+
+  filter: blur(10px);
+
+  z-index: -2;
+}
+
+
+
+.day.today::after {
+  content: "";
+  position: absolute;
+
+  left: 50%;
+  bottom: -10px;
+
+  width: 130%;
+  height: 16px;
+
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,40,40,0.9) 0%,
+    rgba(255,40,40,0.5) 40%,
+    rgba(255,40,40,0) 75%
+  );
+
+  filter: blur(8px);
+
+  z-index: -1;
 }
 
 .day.other { background: #e5e7eb; color: #777; }
@@ -90,7 +205,15 @@ body {
 .day.sc3 { background: #fecaca; }
 .day.lib { background: #bbf7d0; }
 
-.day.today { border: 3px solid red; }
+.day.today {
+
+  border: 2px solid #ff3b30;
+
+  box-shadow:
+  0 0 12px rgba(255,59,48,0.7),
+  inset 0 1px 0 rgba(255,255,255,0.9);
+
+}
 
 /* LEGENDA */
 .legend {
