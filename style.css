@@ -99,7 +99,7 @@ body::after {
 .month-nav button {
   background: none;
   border: none;
-  font-size: 22px;
+  font-size: 24px;
   color: #2563eb;
 }
 
@@ -142,7 +142,7 @@ body::after {
   overflow: visible;
   height: 60px;
 
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   padding-top: 4px;
 
