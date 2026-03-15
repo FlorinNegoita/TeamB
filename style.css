@@ -130,7 +130,7 @@ body::after {
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 3px;
   padding: 12px;
   margin-top: 12px;
 }
