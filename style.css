@@ -202,7 +202,10 @@ inset 0 -3px 6px rgba(0,0,0,0.2);
   z-index: -1;
 }
 
-.day.other { background: #e5e7eb; color: #777; }
+.day.other {
+  background: rgba(229,231,235,0.2);
+  color: rgba(120,120,120,0.6);
+}
 
 .day.sc1 { background: #bfdbfe; }
 .day.sc2 { background: #fde68a; }
