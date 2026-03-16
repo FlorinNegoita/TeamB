@@ -81,6 +81,8 @@ function shiftFor(date) {
   return cycle[(diff % 8 + 8) % 8];
 }
 
+
+
 // =======================
 // RENDER
 // =======================

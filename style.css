@@ -42,6 +42,29 @@ body::after {
   );
 }
 
+.calendar-wrapper{
+  position: relative;
+}
+
+.calendar-bg{
+
+  position: absolute;
+  inset: 0;
+
+  background-image: url("bg.jpg"); /* imaginea ta */
+
+  background-size: cover;
+  background-position: center;
+
+  opacity: 0.25;
+
+  z-index: 0;
+}
+
+.calendar{
+  position: relative;
+  z-index: 1;
+}
 /* HEADER */
 .topbar {
   padding-top: env(safe-area-inset-top);
@@ -119,20 +142,22 @@ body::after {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   padding: 0 12px;
-  margin-bottom: 12px;
-  margin-top: 12px;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  color: black;
 }
 
 /* CALENDAR */
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
-  padding: 12px;
-  margin-top: 12px;
+  column-gap: 3px; 
+  row-gap: 8px;
+  padding: 16px;
+  margin-top: 8px;
 }
 
 .day {
@@ -158,7 +183,7 @@ body::after {
   );
 
   box-shadow:
-0 10px 8px rgba(0,0,0,0.55),
+0 12px 8px rgba(0,0,0,0.55),
 inset 0 1px 0 rgba(255,255,255,0.95),
 inset 0 -3px 6px rgba(0,0,0,0.2);
 
@@ -189,19 +214,57 @@ inset 0 -3px 6px rgba(0,0,0,0.2);
   width: 130%;
   height: 20px;
 
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255,60,60,0.8) 0%,
-    rgba(255,60,60,0.35) 40%,
-    rgba(255,60,60,0) 75%
-  );
+ background:
+radial-gradient(
+  ellipse at center 120%,
+  rgba(255,255,120,0.9) 0%,
+  rgba(255,220,0,0.6) 30%,
+  rgba(255,200,0,0.0) 60%
+),
+conic-gradient(
+  from 0deg at 50% 120%,
+  rgba(255,220,0,0.25) 0deg,
+  rgba(255,220,0,0.0) 20deg,
+  rgba(255,220,0,0.25) 40deg,
+  rgba(255,220,0,0.0) 60deg,
+  rgba(255,220,0,0.25) 80deg,
+  rgba(255,220,0,0.0) 100deg,
+  rgba(255,220,0,0.25) 120deg,
+  rgba(255,220,0,0.0) 140deg,
+  rgba(255,220,0,0.25) 160deg,
+  rgba(255,220,0,0.0) 180deg
+);
 
-  filter: blur(10px);
+  filter: blur(3px);
 
   z-index: -2;
 }
 
+.today {
+  position: relative;
+  z-index: 2;
+}
 
+.today::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 10px;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(59,130,246,0.6) 0%,
+    rgba(59,130,246,0.25) 40%,
+    rgba(59,130,246,0) 80%
+  );
+
+  filter: blur(6px);
+  border-radius: 50%;
+  pointer-events: none;
+}
 
 .day.other {
   background: rgba(229,231,235,0.2);
@@ -231,6 +294,7 @@ inset 0 -3px 6px rgba(0,0,0,0.2);
   inset 0 1px 0 rgba(255,255,255,0.9);
 
 }
+
 
 
 /* LEGENDA */
@@ -312,6 +376,4 @@ footer {
 
 .day.holiday .shift {
   color: #d32f2f;
-}
-r: #107c10;
 }
